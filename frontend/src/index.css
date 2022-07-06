@@ -154,15 +154,45 @@ thead tr {
 }
 
 /* navbar */
+.main-nav {
+  position: relative;
+}
+
+.nav-icon {
+  padding: 1rem;
+  position: relative;
+}
+.nav-icon:nth-of-type(2) {
+  margin-left: auto;
+}
+
 .nav-icon img {
   width: 40px;
   /* display: inline-block; */
 }
+
+.badge-pill {
+  aspect-ratio: 1/1;
+  font-size: 0.65rem;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: flex;
+  align-items: center;
+}
+
 .logo {
-  max-width: 400px;
+  max-width: 200px;
+  min-width: 150px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .search-container {
   background: rgb(255, 0, 0);
+  padding-right: 26px;
+  padding-left: 10px;
   background: linear-gradient(
     180deg,
     rgba(255, 0, 0, 1) 0%,
@@ -211,10 +241,41 @@ thead tr {
   box-shadow: none;
 }
 
-/* sidebar */
-/* .navbar-brand {
-  font-weight: bold;
-} */
+.nav-links {
+}
+.sign-in-link {
+  display: block;
+  align-self: center;
+}
+.dropMan > a {
+  padding: 0;
+}
+
+.avatar-btn {
+  margin: 0 auto;
+  border: none;
+  background-color: transparent;
+  display: block;
+}
+.avatar-container {
+  position: relative;
+}
+.avatar-choise-container {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: none;
+  width: 400px;
+  transform: translate(100%, 100%);
+}
+.avatar-choise-container button {
+  border: none;
+  background-color: white;
+}
+.avatar-choise-container.open {
+  display: flex;
+  flex-wrap: wrap;
+}
 
 /* width and left according to the size of the side-nav you want */
 .side-navbar {
@@ -243,6 +304,33 @@ thead tr {
 }
 .text-bold {
   font-weight: bold;
+}
+.search-container i {
+  font-size: 1.5rem;
+  text-shadow: 1px 1px 0px yellow, -1px 1px 0px yellow, -1px -1px 0px yellow,
+    1px -1px 0px yellow;
+}
+@media (max-width: 600px) {
+  .avatar-choise-container {
+    width: 300px;
+    /* display: inline-block; */
+  }
+}
+@media (max-width: 500px) {
+  .nav-icon img {
+    width: 30px;
+    /* display: inline-block; */
+  }
+  .avatar-choise-container {
+    width: 200px;
+    /* display: inline-block; */
+  }
+}
+@media (max-width: 500px) {
+  .nav-icon img {
+    width: 30px;
+    /* display: inline-block; */
+  }
 }
 
 /* Map */

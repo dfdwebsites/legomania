@@ -1,5 +1,11 @@
 import { Canvas } from '@react-three/fiber';
-import React, { Suspense, useEffect, useRef, useState } from 'react';
+import React, {
+  Suspense,
+  useEffect,
+  useReducer,
+  useRef,
+  useState
+} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -7,21 +13,59 @@ import Button from 'react-bootstrap/Button';
 import { Environment, OrbitControls } from '@react-three/drei';
 import LoaderTHREE from '../components/LoaderTHREE';
 import Model from '../components/TestCubes';
+import { Helmet } from 'react-helmet-async';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
+import axios from 'axios';
 
-export default function ProductDelailsScreen() {
+function reducer(state, action) {
+  switch (action.type) {
+    case 'FETCH_REQUEST':
+      return { ...state, loading: true };
+    case 'FETCH_SUCCESS':
+      return { ...state, loading: false, product: action.payload };
+    case 'FETCH_FAIL':
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+}
+
+export default function ProductScreen() {
+  const [{ product, loading, error }, dispatch] = useReducer(reducer, {
+    product: {},
+    loading: true,
+    error: ''
+  });
   const params = useParams();
   const { slug } = params;
   const [three, setThree] = useState(false);
 
   // const buttonRef = React.forwardRef((props, ref)=>{
   useEffect(() => {
-    console.log();
-  });
+    const fetchdata = async () => {
+      try {
+        dispatch({ type: 'FETCH_REQUEST' });
+        const { data } = await axios.get(`/api/products/slug/${slug}`);
+        dispatch({ type: 'FETCH_SUCCESS', payload: data });
+      } catch (err) {
+        dispatch({ type: 'FETCH_FAIL', payload: err.message });
+      }
+    };
+    fetchdata();
+  }, []);
 
-  return (
-    <div>
+  return loading ? (
+    <LoadingBox />
+  ) : error ? (
+    <MessageBox variant="danger">{error}</MessageBox>
+  ) : (
+    <main>
+      <Helmet>
+        <title>product {product.name}</title>
+      </Helmet>
       <Link to="/">home</Link>
-      <Row>
+      <Row style={{ minHeight: '500px' }}>
         <Col md={6} style={{ position: 'relative' }}>
           <button
             className="setting-three d-flex justify-content-center align-items-center"
@@ -56,18 +100,8 @@ export default function ProductDelailsScreen() {
         </Col>
         <Col md={3}>
           <ul>
-            <li>testing header</li>
-            <li>
-              <p>
-                psum dolor sit amet consectetur adipiscing elit tempus, gravida
-                felis et platea convallis lacinia etiam facilisi in, id a ut ac
-                enim luctus penatibus. Inceptos taciti facilisis lobortis montes
-                ridiculus pharetra dis tristique primis parturient nec aptent
-                ullamcorper quisque, purus pulvinar mauris a et risus posuere
-                placerat cum pellentesque proin at. Sem porta placerat dictumst
-                primis suspendisse ve
-              </p>
-            </li>
+            <li>{product.name}</li>
+            <li>{product.description}</li>
             <li>
               <Button> Add to cart</Button>
             </li>
@@ -85,6 +119,6 @@ export default function ProductDelailsScreen() {
           </ul>
         </Col>
       </Row>
-    </div>
+    </main>
   );
 }

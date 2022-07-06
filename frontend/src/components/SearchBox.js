@@ -66,7 +66,11 @@ export default function SearchBox() {
     navigate(query ? `/search/?query=${query}` : '/search');
   };
   return (
-    <Form className="d-flex" onSubmit={submitHandler}>
+    <Form
+      className="d-flex"
+      style={{ margin: '0 auto' }}
+      onSubmit={submitHandler}
+    >
       <InputGroup>
         <FormControl
           ref={searchRef}

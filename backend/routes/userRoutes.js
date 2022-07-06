@@ -29,6 +29,27 @@ userRouter.get(
     }
   })
 );
+userRouter.put(
+  '/avatar',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findOne({ email: req.body.email });
+    if (user) {
+      user.avatar = req.body.avatar || user.avatar;
+      const updateUser = await user.save();
+      res.send({
+        _id: updateUser._id,
+        name: updateUser.name,
+        email: updateUser.email,
+        avatar: updateUser.avatar,
+        isAdmin: updateUser.isAdmin,
+        token: generateToken(updateUser)
+      });
+    } else {
+      res.status(404).send({ message: 'User Not Found' });
+    }
+  })
+);
 
 userRouter.put(
   '/:id',
@@ -77,6 +98,7 @@ userRouter.post(
           _id: user._id,
           name: user.name,
           email: user.email,
+          avatar: user.avatar,
           isAdmin: user.isAdmin,
           token: generateToken(user)
         });

@@ -15,59 +15,63 @@ export default function CartConfirm(props) {
       id="cart-confirm-container"
       className="d-flex justify-content-center align-items-center cart-confirm-container"
     >
-      <div className="confirm-card">
-        <Row className="mb-2 align-items-end">
-          <Col md={1}>
+      <div className="confirm-card d-flex flex-column">
+        <div className="mb-2  d-flex">
+          <div>
             {' '}
             <i
-              class="fas fa-check-circle"
+              className="fas fa-check-circle"
               style={{ color: 'green', fontSize: '1.5rem' }}
             ></i>
-          </Col>
-          <Col md={10}>
+          </div>
+          <div className="ms-2">
             <div>Item succesfully added to cart</div>
-          </Col>
-          <Col md={1}>
+          </div>
+          <div style={{ marginLeft: 'auto' }}>
             <button className="close-btn" onClick={() => props.closeDiv()}>
-              <i class="fas fa-times"></i>
+              <i className="fas fa-times"></i>
             </button>
-          </Col>
-        </Row>
-        <Row className="mb-2">
-          <Col md={4} className="align-items-center d-flex">
+          </div>
+        </div>
+        <div className="mb-2 d-flex">
+          <div
+            className="align-items-center d-flex"
+            style={{ flex: '1 0 100px' }}
+          >
             <img src={product.image} alt={product.name} />
-          </Col>
-          <Col className="p-0">
-            <Row className="mb-2">
-              <Col>{product.name}</Col>
-            </Row>
-
-            <Row className="mb-2">
-              <Col>
-                <strong>${product.price}</strong>
-              </Col>
-            </Row>
-
-            <Row className="mb-2">
-              <Col>Qty:{product.quantity}</Col>
-            </Row>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={6} className="d-flex justify-content-center">
+          </div>
+          <div
+            className="p-0 d-flex flex-column ms-2"
+            style={{ flex: '3 1 400px' }}
+          >
+            <div className="mb-2">{product.name}</div>
+            <div className="mb-2">
+              <strong>${product.price}</strong>
+            </div>
+            <div className="mb-2">Qty:{product.quantity}</div>
+          </div>
+        </div>
+        <div className="d-flex">
+          <div className="d-flex justify-content-center w-100">
             {' '}
-            <Button style={{ width: '80%' }} onClick={() => props.closeDiv()}>
+            <Button
+              style={{ width: '80%', fontSize: '.75rem' }}
+              onClick={() => props.closeDiv()}
+            >
               {' '}
               Continiue Shopping
             </Button>
-          </Col>
-          <Col md={6} className="d-flex justify-content-center">
+          </div>
+          <div className="d-flex justify-content-center w-100">
             {' '}
-            <Button style={{ width: '80%' }} onClick={() => navigate('/cart')}>
+            <Button
+              style={{ width: '80%', fontSize: '.75rem' }}
+              onClick={() => navigate('/cart')}
+            >
               View My Bag
             </Button>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </div>
     </div>
   );
