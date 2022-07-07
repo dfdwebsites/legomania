@@ -1,6 +1,7 @@
 import { Canvas } from '@react-three/fiber';
 import React, {
   Suspense,
+  useContext,
   useEffect,
   useReducer,
   useRef,
@@ -9,6 +10,9 @@ import React, {
 import { Link, useParams } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
+import Badge from 'react-bootstrap/Badge';
+import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import { Environment, OrbitControls } from '@react-three/drei';
 import LoaderTHREE from '../components/LoaderTHREE';
@@ -17,6 +21,8 @@ import { Helmet } from 'react-helmet-async';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import axios from 'axios';
+import Rating from '../components/Rating';
+import { Store } from '../Store';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -37,6 +43,8 @@ export default function ProductScreen() {
     loading: true,
     error: ''
   });
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { userInfo } = state;
   const params = useParams();
   const { slug } = params;
   const [three, setThree] = useState(false);
@@ -53,7 +61,9 @@ export default function ProductScreen() {
       }
     };
     fetchdata();
-  }, []);
+  }, [slug]);
+
+  const addToCartHandler = () => {};
 
   return loading ? (
     <LoadingBox />
@@ -65,8 +75,8 @@ export default function ProductScreen() {
         <title>product {product.name}</title>
       </Helmet>
       <Link to="/">home</Link>
-      <Row style={{ minHeight: '500px' }}>
-        <Col md={6} style={{ position: 'relative' }}>
+      <Row style={{ minHeight: '500px' }} className="g-0 mb-5">
+        <Col md={9} style={{ position: 'relative' }}>
           <button
             className="setting-three d-flex justify-content-center align-items-center"
             disabled={three}
@@ -76,7 +86,7 @@ export default function ProductScreen() {
             3D
           </button>
           {three ? (
-            <Canvas>
+            <Canvas style={{ minHeight: '500px' }}>
               <Suspense fallback={<LoaderTHREE />}>
                 <ambientLight />
                 <pointLight position={[10, 10, 10]} />
@@ -94,31 +104,104 @@ export default function ProductScreen() {
             // ></iframe>
             <>
               {/* <button id="create"> build </button> */}
-              <img className="img-large" src="/images/test.jpg" alt="testing" />
+              <img className="img-large" src={product.image} alt="testing" />
             </>
           )}
         </Col>
-        <Col md={3}>
-          <ul>
-            <li>{product.name}</li>
-            <li>{product.description}</li>
-            <li>
-              <Button> Add to cart</Button>
-            </li>
-          </ul>
-        </Col>
-        <Col md={3}>
-          <ul>
-            <li>testing header</li>
-            <li>
-              <p>psum dolor situere pnmis suspendisse ve</p>
-            </li>
-            <li>
-              <Button> Add to cart</Button>
-            </li>
-          </ul>
+        <Col md={3} className="ps-2">
+          <ListGroup variant="flush">
+            <Helmet>
+              <title>{product.name}</title>
+            </Helmet>
+
+            {/* <ListGroup.Item>
+              <Row xs={1} md={2} className="g-2">
+                {[product.image, ...product.images].map((x) => (
+                  <Col key={x}>
+                    <Card>
+                      <Button
+                        className="thumbnail"
+                        type="button"
+                        variant="light"
+                        onClick={() => setSelectedImage(x)}
+                      >
+                        <Card.Img variant="top" src={x} alt="product" />
+                      </Button>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            </ListGroup.Item> */}
+          </ListGroup>
+
+          <Card style={{ boxShadow: '1px 1px 20px 0px rgba(0, 0, 0, 0.3)' }}>
+            <Card.Body className="p-0">
+              <ListGroup variant="flush">
+                <ListGroup.Item>
+                  <Row className="align-items-center">
+                    <h2>{product.name}</h2>
+                  </Row>
+
+                  <Row>
+                    <Rating
+                      rating={product.rating}
+                      numReviews={product.numReviews}
+                      slug={product.slug}
+                    />
+                  </Row>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <p>{product.description}</p>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <Row>
+                    <Col>Price :</Col>
+                    <Col>
+                      <strong>${product.price}</strong>
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <Row>
+                    <Col>Status :</Col>
+                    <Col>
+                      {product.countInStock > 0 ? (
+                        <Badge bg="success">Available</Badge>
+                      ) : (
+                        <Badge bg="danger">Unavailable</Badge>
+                      )}
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
+                {product.countInStock > 0 && (
+                  <ListGroup.Item>
+                    <div className="d-grid">
+                      <Button variant="primary" onClick={addToCartHandler}>
+                        Add to Cart
+                      </Button>
+                    </div>
+                  </ListGroup.Item>
+                )}
+              </ListGroup>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
+      <div id="reviews">
+        {product.reviews.length > 0 ? (
+          <div>test</div>
+        ) : (
+          <MessageBox variant="info">
+            {' '}
+            There are no Reviews for this product...{' '}
+          </MessageBox>
+        )}
+        {/* {userInfo ? (
+          <Link to={`/product/${product.slug}`}>Leave a review</Link>
+        ) : (
+          <Link to="/signin">Sign in to leave a review</Link>
+        )} */}
+      </div>
     </main>
   );
 }

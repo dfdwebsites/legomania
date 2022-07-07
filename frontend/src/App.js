@@ -18,6 +18,8 @@ import SigninScreen from './screens/SigninScreen';
 import SignupScreen from './screens/SignupScreen';
 import { Store } from './Store';
 import LoadingBox from './components/LoadingBox';
+import ShippingScreen from './screens/ShippingScreen';
+import Row from 'react-bootstrap/Row';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -96,7 +98,11 @@ function App() {
   };
 
   const openAvatars = () => {
-    avatarContainerRef.current.classList.add('open');
+    if (avatarContainerRef.current.classList.contains('open')) {
+      avatarContainerRef.current.classList.remove('open');
+    } else {
+      avatarContainerRef.current.classList.add('open');
+    }
   };
 
   return (
@@ -129,7 +135,7 @@ function App() {
                     </button>
                     <div
                       ref={avatarContainerRef}
-                      className="avatar-choise-container open"
+                      className="avatar-choise-container"
                     >
                       {avatars.map((avatarImg) => (
                         <Col key={avatarImg} md={3}>
@@ -197,7 +203,36 @@ function App() {
               }}
               onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
             >
-              <i className="fas fa-expand-alt"></i>
+              <Row>
+                {' '}
+                <i
+                  className={`${
+                    sidebarIsOpen
+                      ? 'fas fa-long-arrow-alt-left'
+                      : 'fas fa-long-arrow-alt-right'
+                  }`}
+                ></i>
+              </Row>
+              <Row>
+                {' '}
+                <i
+                  className={`${
+                    sidebarIsOpen
+                      ? 'fas fa-long-arrow-alt-left'
+                      : 'fas fa-long-arrow-alt-right'
+                  }`}
+                ></i>
+              </Row>
+              <Row>
+                {' '}
+                <i
+                  className={`${
+                    sidebarIsOpen
+                      ? 'fas fa-long-arrow-alt-left'
+                      : 'fas fa-long-arrow-alt-right'
+                  }`}
+                ></i>
+              </Row>
             </button>
             <SearchBox />
           </div>
@@ -235,6 +270,7 @@ function App() {
               <Route path="/cart" element={<CartScreen />} />
               <Route path="/signin" element={<SigninScreen />} />
               <Route path="/signup" element={<SignupScreen />} />
+              <Route path="/shipping" element={<ShippingScreen />} />
               <Route path="/" element={<HomeScreen />} />
             </Routes>
           </Container>

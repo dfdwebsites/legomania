@@ -81,6 +81,10 @@ main {
   -moz-box-shadow: none;
 }
 
+.margin-center {
+  margin: 0 auto;
+}
+
 .products {
   display: flex;
   flex-wrap: wrap;
@@ -134,7 +138,34 @@ main {
 .checkout-steps > div {
   border-bottom: 0.2rem solid var(--grey-clr);
   color: var(--grey-clr);
+  text-align: center;
+  position: relative;
+  /* margin-right: 30px; */
 }
+/* .checkout-steps > div::before,
+.checkout-steps > div::after {
+  content: '';
+  width: 1px;
+  height: 1px;
+  /* background-color: inherit; */
+/* position: absolute; */
+/* } 
+
+/* .checkout-steps > div::before {
+  top: 0;
+  left: 0;
+  transform: translate(-100%);
+  border: 14px solid black;
+  border-left-color: transparent;
+}
+.checkout-steps > div::after {
+  top: 0;
+  right: 0;
+  transform: translate(100%);
+  border: 14px solid transparent;
+  border-left-color: black;
+} */
+
 .checkout-steps > div.active {
   border-bottom: 0.2rem solid var(--accent-clr);
   color: var(--accent-clr);
@@ -266,7 +297,7 @@ thead tr {
   bottom: 0;
   display: none;
   width: 400px;
-  transform: translate(100%, 100%);
+  transform: translate(101%, 100%);
 }
 .avatar-choise-container button {
   border: none;
@@ -306,7 +337,7 @@ thead tr {
   font-weight: bold;
 }
 .search-container i {
-  font-size: 1.5rem;
+  line-height: 0.6;
   text-shadow: 1px 1px 0px yellow, -1px 1px 0px yellow, -1px -1px 0px yellow,
     1px -1px 0px yellow;
 }
@@ -435,4 +466,8 @@ button.thumbnail {
 .close-btn {
   background-color: transparent;
   border: none;
+}
+
+.rating i {
+  color: #ffd500;
 }
