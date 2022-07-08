@@ -45,7 +45,7 @@ export default function CartScreen() {
           <Col md={8}>
             {cartItems.map((item) => (
               <Row key={item._id} className="align-items-center mb-2">
-                <Col md={2}>
+                <Col xs={6} md={2}>
                   <Link to={`/product/${item.slug}`}>
                     <img
                       src={item.image}
@@ -54,10 +54,10 @@ export default function CartScreen() {
                     />
                   </Link>
                 </Col>
-                <Col md={4}>
+                <Col xs={6} md={4}>
                   {item.name} <br />${item.price}
                 </Col>
-                <Col md={4}>
+                <Col xs={6} md={4}>
                   <Button
                     onClick={() => updateCartHandler(item, item.quantity - 1)}
                     disabled={item.quantity <= 1}
@@ -73,7 +73,7 @@ export default function CartScreen() {
                     <i className="fas fa-plus"></i>
                   </Button>
                 </Col>
-                <Col md={2}>
+                <Col xs={6} md={2}>
                   <Button onClick={() => removeItem(item)}>
                     {' '}
                     <i className="fas fa-trash-alt"></i>

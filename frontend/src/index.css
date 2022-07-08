@@ -293,6 +293,7 @@ thead tr {
 }
 .avatar-choise-container {
   position: absolute;
+  background-color: white;
   right: 0;
   bottom: 0;
   display: none;
@@ -341,10 +342,9 @@ thead tr {
   text-shadow: 1px 1px 0px yellow, -1px 1px 0px yellow, -1px -1px 0px yellow,
     1px -1px 0px yellow;
 }
-@media (max-width: 600px) {
+@media (max-width: 575.98px) {
   .avatar-choise-container {
-    width: 300px;
-    /* display: inline-block; */
+    width: 152px;
   }
 }
 @media (max-width: 500px) {
@@ -352,10 +352,10 @@ thead tr {
     width: 30px;
     /* display: inline-block; */
   }
-  .avatar-choise-container {
+  /* .avatar-choise-container {
     width: 200px;
-    /* display: inline-block; */
-  }
+    
+  } */
 }
 @media (max-width: 500px) {
   .nav-icon img {

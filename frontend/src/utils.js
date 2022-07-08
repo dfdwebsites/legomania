@@ -3,3 +3,5 @@ function getError(error) {
     ? error.response.data.message
     : error.message;
 }
+
+export { getError };

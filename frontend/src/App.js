@@ -1,5 +1,7 @@
 import { BrowserRouter, Route, Link, Routes } from 'react-router-dom';
 import { useContext, useEffect, useReducer, useRef, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import ProductScreen from './screens/ProductScreen';
 import HomeScreen from './screens/HomeScreen';
 import Container from 'react-bootstrap/Container';
@@ -20,6 +22,11 @@ import { Store } from './Store';
 import LoadingBox from './components/LoadingBox';
 import ShippingScreen from './screens/ShippingScreen';
 import Row from 'react-bootstrap/Row';
+import PaymentScreen from './screens/PaymentScreen';
+import PlaceOrderScreen from './screens/PlaceOrderScreen';
+import ProtectedRoute from './components/ProtectedRoute';
+import ProfileScreen from './screens/ProfileScreen';
+import OrderHistoryScreen from './screens/OrderHistoryScreen';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -58,6 +65,7 @@ function App() {
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGN_OUT' });
     localStorage.removeItem('userInfo');
+    localStorage.removeItem('shippingAddress');
     window.location.href = '/signin';
   };
 
@@ -120,6 +128,7 @@ function App() {
           // : 'd-flex flex-column site-container '
         }
       >
+        <ToastContainer position="bottom-center" limit={1} />
         <header>
           <nav className="main-nav d-flex justify-content-between align-items-center w-100 px-2">
             {userInfo ? (
@@ -138,7 +147,13 @@ function App() {
                       className="avatar-choise-container"
                     >
                       {avatars.map((avatarImg) => (
-                        <Col key={avatarImg} md={3}>
+                        <Col
+                          key={avatarImg}
+                          xs={12}
+                          sm={6}
+                          md={4}
+                          className="d-flex justify-content-center"
+                        >
                           <button onClick={() => setAvatarImg(avatarImg)}>
                             <img src={avatarImg} alt="lego head for avatar" />
                           </button>
@@ -271,6 +286,27 @@ function App() {
               <Route path="/signin" element={<SigninScreen />} />
               <Route path="/signup" element={<SignupScreen />} />
               <Route path="/shipping" element={<ShippingScreen />} />
+              <Route path="/payment" element={<PaymentScreen />} />
+              <Route path="/placeorder" element={<PlaceOrderScreen />} />
+              {/* useronly routes */}
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfileScreen />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/orderhistory"
+                element={
+                  <ProtectedRoute>
+                    <OrderHistoryScreen />
+                  </ProtectedRoute>
+                }
+              />
+              {/* adminonly routes */}
+
               <Route path="/" element={<HomeScreen />} />
             </Routes>
           </Container>

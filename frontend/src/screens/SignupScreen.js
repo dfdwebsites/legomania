@@ -5,6 +5,9 @@ import Form from 'react-bootstrap/Form';
 import { Helmet } from 'react-helmet-async';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Store } from '../Store';
+import { toast } from 'react-toastify';
+import { getError } from '../utils';
+import axios from 'axios';
 
 export default function SignupScreen() {
   const navigate = useNavigate();
@@ -28,6 +31,22 @@ export default function SignupScreen() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      toast.error('Password and Confirm Password do not match');
+      return;
+    }
+    try {
+      const { data } = await axios.put('/api/users/signup', {
+        name,
+        email,
+        password
+      });
+      ctxDispatch({ type: 'USER_SIGN_IN', payload: data });
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      navigate(redirect || '/');
+    } catch (err) {
+      toast.error(getError(err));
+    }
   };
 
   return (

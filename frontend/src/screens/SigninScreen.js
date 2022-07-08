@@ -6,6 +6,8 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet-async';
+import { toast } from 'react-toastify';
+import { getError } from '../utils';
 
 export default function SigninScreen() {
   const { search } = useLocation();
@@ -15,6 +17,7 @@ export default function SigninScreen() {
   const { state, dispatch: ctxDispath } = useContext(Store);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(true);
   const { userInfo } = state;
   const navigate = useNavigate();
 
@@ -32,10 +35,13 @@ export default function SigninScreen() {
         password
       });
       ctxDispath({ type: 'USER_SIGN_IN', payload: data });
-      localStorage.setItem('userInfo', JSON.stringify(data));
+
+      if (rememberMe) {
+        localStorage.setItem('userInfo', JSON.stringify(data));
+      }
       navigate(redirect || '/');
     } catch (err) {
-      //do something with errors messages
+      toast.error(getError(err));
     }
   };
 
@@ -60,6 +66,15 @@ export default function SigninScreen() {
             type="password"
             required
             onChange={(e) => setPassword(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="rememberMe">
+          <Form.Check
+            type="checkbox"
+            label="Remember me?"
+            checked={rememberMe}
+            // value={rememberMe}
+            onChange={(e) => setRememberMe(!rememberMe)}
           />
         </Form.Group>
         <div className="mb-3">
