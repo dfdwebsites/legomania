@@ -27,6 +27,14 @@ import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import ProtectedRoute from './components/ProtectedRoute';
 import ProfileScreen from './screens/ProfileScreen';
 import OrderHistoryScreen from './screens/OrderHistoryScreen';
+import OrderDetailsScreen from './screens/OrderDetailsScreen';
+import AdminRoute from './components/AdminRoute';
+import DashboardScreen from './screens/DashboardScreen';
+import ProductsListScreen from './screens/ProductsListScreen';
+import OrdersListScreen from './screens/OrdersListScreen';
+import UsersListScreen from './screens/UsersListScreen';
+import UserEditScreen from './screens/UserEditScreen';
+import ProductEditScreen from './screens/ProductEditScreen';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -130,62 +138,83 @@ function App() {
       >
         <ToastContainer position="bottom-center" limit={1} />
         <header>
-          <nav className="main-nav d-flex justify-content-between align-items-center w-100 px-2">
-            {userInfo ? (
-              <>
-                <NavDropdown title={userInfo.name} className="dropMan">
-                  <div className="avatar-container">
-                    <button className="avatar-btn" onClick={openAvatars}>
-                      <img
-                        src={userInfo.avatar}
-                        alt="lego head for avatar"
-                        className="avatar"
-                      />
-                    </button>
-                    <div
-                      ref={avatarContainerRef}
-                      className="avatar-choise-container"
-                    >
-                      {avatars.map((avatarImg) => (
-                        <Col
-                          key={avatarImg}
-                          xs={12}
-                          sm={6}
-                          md={4}
-                          className="d-flex justify-content-center"
-                        >
-                          <button onClick={() => setAvatarImg(avatarImg)}>
-                            <img src={avatarImg} alt="lego head for avatar" />
-                          </button>
-                        </Col>
-                      ))}
-                      {loading && <LoadingBox />}
+          <nav className="main-nav d-flex justify-content-between align-items-center w-100 px-3 pt-2">
+            <div>
+              {userInfo ? (
+                <>
+                  <NavDropdown title={userInfo.name} className="dropMan">
+                    <div className="avatar-container">
+                      <button className="avatar-btn" onClick={openAvatars}>
+                        <img
+                          src={userInfo.avatar}
+                          alt="lego head for avatar"
+                          className="avatar"
+                        />
+                      </button>
+                      <div
+                        ref={avatarContainerRef}
+                        className="avatar-choise-container"
+                      >
+                        {avatars.map((avatarImg) => (
+                          <Col
+                            key={avatarImg}
+                            xs={12}
+                            sm={6}
+                            md={4}
+                            className="d-flex justify-content-center"
+                          >
+                            <button onClick={() => setAvatarImg(avatarImg)}>
+                              <img src={avatarImg} alt="lego head for avatar" />
+                            </button>
+                          </Col>
+                        ))}
+                        {loading && <LoadingBox />}
+                      </div>
                     </div>
-                  </div>
 
-                  <LinkContainer to="/profile">
-                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                    <LinkContainer to="/profile">
+                      <NavDropdown.Item>Profile</NavDropdown.Item>
+                    </LinkContainer>
+                    <LinkContainer to="/orderhistory">
+                      <NavDropdown.Item>Orders History</NavDropdown.Item>
+                    </LinkContainer>
+                    <NavDropdown.Divider />
+                    <Link
+                      to="#singout"
+                      className="dropdown-item"
+                      onClick={signoutHandler}
+                    >
+                      {' '}
+                      Sing Out
+                    </Link>
+                  </NavDropdown>
+                </>
+              ) : (
+                <Link className="nav-links sign-in-link" to="/signin">
+                  Sign In
+                </Link>
+              )}
+              {userInfo && userInfo.isAdmin && (
+                <NavDropdown
+                  title="Admin"
+                  id="admin-nav-dropdown"
+                  className="d-flex align-items-center test"
+                >
+                  <LinkContainer to="/admin/dashboard">
+                    <NavDropdown.Item>Dashboard</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/orderhistory">
-                    <NavDropdown.Item>Another action</NavDropdown.Item>
+                  <LinkContainer to="/admin/products">
+                    <NavDropdown.Item>Products</NavDropdown.Item>
                   </LinkContainer>
-                  <NavDropdown.Divider />
-                  <Link
-                    to="#singout"
-                    className="dropdown-item"
-                    onClick={signoutHandler}
-                  >
-                    {' '}
-                    Sing Out
-                  </Link>
+                  <LinkContainer to="/admin/orders">
+                    <NavDropdown.Item>Orders</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/users">
+                    <NavDropdown.Item>Users</NavDropdown.Item>
+                  </LinkContainer>
                 </NavDropdown>
-              </>
-            ) : (
-              <Link className="nav-links sign-in-link" to="/signin">
-                Sign In
-              </Link>
-            )}
-
+              )}
+            </div>
             <div className="d-flex flex-column justify-content-between align-items-center logo">
               <Link to="/">
                 <img className="img-large" src="/images/logo.jpg" alt="logo" />
@@ -288,7 +317,16 @@ function App() {
               <Route path="/shipping" element={<ShippingScreen />} />
               <Route path="/payment" element={<PaymentScreen />} />
               <Route path="/placeorder" element={<PlaceOrderScreen />} />
-              {/* useronly routes */}
+
+              {/* user-only routes */}
+              <Route
+                path="/order/:id"
+                element={
+                  <ProtectedRoute>
+                    <OrderDetailsScreen />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/profile"
                 element={
@@ -306,6 +344,54 @@ function App() {
                 }
               />
               {/* adminonly routes */}
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <AdminRoute>
+                    <DashboardScreen />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/products"
+                element={
+                  <AdminRoute>
+                    <ProductsListScreen />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/product/:id"
+                element={
+                  <AdminRoute>
+                    <ProductEditScreen />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/orders"
+                element={
+                  <AdminRoute>
+                    <OrdersListScreen />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/users"
+                element={
+                  <AdminRoute>
+                    <UsersListScreen />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/user/:id"
+                element={
+                  <AdminRoute>
+                    <UserEditScreen />
+                  </AdminRoute>
+                }
+              />
 
               <Route path="/" element={<HomeScreen />} />
             </Routes>

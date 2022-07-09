@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useReducer } from 'react';
 import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { Store } from '../Store';
@@ -16,26 +17,34 @@ function reducer(state, action) {
       return { ...state, loading: false, orders: action.payload };
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
+    case 'DELETE_REQUEST':
+      return { ...state, loadingDelete: true };
+    case 'DELETE_SUCCESS':
+      return { ...state, loadingDelete: false, deleteSuccess: true };
+    case 'DELETE_FAIL':
+      return { ...state, loadingDelete: false };
+    case 'DELETE_RESET':
+      return { ...state, loadingDelete: false, deleteSuccess: false };
     default:
       return state;
   }
 }
 
-export default function OrderHistoryScreen() {
+export default function OrdersListScreen() {
+  const navigate = useNavigate();
   const { state } = useContext(Store);
   const { userInfo } = state;
-  const navigate = useNavigate();
-
-  const [{ orders, loading, error }, dispatch] = useReducer(reducer, {
-    error: '',
-    loading: true
-  });
+  const [{ orders, loading, error, deleteSuccess, loadingDelete }, dispatch] =
+    useReducer(reducer, {
+      loading: true,
+      error: ''
+    });
 
   useEffect(() => {
-    const fetchOrders = async () => {
+    const fetchData = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get('/api/orders/mine', {
+        const { data } = await axios.get('/api/orders/', {
           headers: { authorization: `Bearer ${userInfo.token}` }
         });
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
@@ -43,21 +52,38 @@ export default function OrderHistoryScreen() {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
       }
     };
-    if (!userInfo) {
-      navigate('/signin');
+    if (deleteSuccess) {
+      dispatch({ type: 'DELETE_RESET' });
+    } else {
+      fetchData();
     }
-    fetchOrders();
-  }, [navigate, userInfo]);
+  }, [userInfo, deleteSuccess]);
+
+  const deleteHandler = async (order) => {
+    if (window.confirm('Are you sure you want to delete the order?')) {
+      try {
+        dispatch({ type: 'DELETE_REQUEST' });
+        await axios.delete(`/api/orders/${order._id}`, {
+          headers: { authorization: `Bearer ${userInfo.token}` }
+        });
+        toast.success('Order Deleted Successfully');
+        dispatch({ type: 'DELETE_SUCCESS' });
+      } catch (err) {
+        dispatch({ type: 'DELETE_FAIL' });
+        toast.error(getError(err));
+      }
+    }
+  };
 
   return (
     <div>
       <Helmet>
-        <title>Order History</title>
+        <title>Orders</title>
       </Helmet>
-
-      <h1>Order History</h1>
+      <h1>Orders</h1>
+      {loadingDelete && <LoadingBox />}
       {loading ? (
-        <LoadingBox></LoadingBox>
+        <LoadingBox />
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
@@ -65,6 +91,7 @@ export default function OrderHistoryScreen() {
           <thead>
             <tr>
               <th>ID</th>
+              <th>USER</th>
               <th>DATE</th>
               <th>TOTAL</th>
               <th>PAID</th>
@@ -76,6 +103,7 @@ export default function OrderHistoryScreen() {
             {orders.map((order) => (
               <tr key={order._id}>
                 <td>{order._id}</td>
+                <td>{order.user ? order.user.name : 'DELETED USER'}</td>
                 <td>{order.createdAt.substring(0, 10)}</td>
                 <td>{order.totalPrice.toFixed(2)}</td>
                 <td>{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</td>
@@ -93,6 +121,15 @@ export default function OrderHistoryScreen() {
                     }}
                   >
                     Details
+                  </Button>{' '}
+                  <Button
+                    type="button"
+                    variant="light"
+                    onClick={() => {
+                      deleteHandler(order);
+                    }}
+                  >
+                    Delete
                   </Button>
                 </td>
               </tr>

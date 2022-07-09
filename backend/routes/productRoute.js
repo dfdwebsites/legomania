@@ -18,7 +18,7 @@ productRouter.post(
     const newProduct = new Product({
       name: 'sample name ' + Date.now(),
       slug: 'sample name- ' + Date.now(),
-      image: '/images/caesarsSalad.jpg',
+      image: '/images/test.jpg',
       category: 'sample category',
       description: 'sample description',
       price: 0,

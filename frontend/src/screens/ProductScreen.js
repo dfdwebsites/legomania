@@ -90,7 +90,9 @@ export default function ProductScreen() {
               <Suspense fallback={<LoaderTHREE />}>
                 <ambientLight />
                 <pointLight position={[10, 10, 10]} />
-                <Model url={`models/${slug}.mpd`} />
+                <Model
+                  url={`models/${slug.includes('sample') ? 'car' : slug}.mpd`}
+                />
                 <OrbitControls />
                 <Environment preset="sunset" />
               </Suspense>
@@ -196,11 +198,11 @@ export default function ProductScreen() {
             There are no Reviews for this product...{' '}
           </MessageBox>
         )}
-        {/* {userInfo ? (
+        {userInfo ? (
           <Link to={`/product/${product.slug}`}>Leave a review</Link>
         ) : (
           <Link to="/signin">Sign in to leave a review</Link>
-        )} */}
+        )}
       </div>
     </main>
   );
