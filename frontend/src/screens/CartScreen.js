@@ -9,6 +9,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import { Store } from '../Store';
 import MessageBox from '../components/MessageBox';
 import FreeShipping from '../components/FreeShipping';
+import Container from 'react-bootstrap/Container';
 
 export default function CartScreen() {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ export default function CartScreen() {
   };
 
   return (
-    <div>
+    <Container>
       <Helmet>
         <title>My Bag</title>
       </Helmet>
@@ -115,6 +116,6 @@ export default function CartScreen() {
           </Col>
         </Row>
       )}
-    </div>
+    </Container>
   );
 }

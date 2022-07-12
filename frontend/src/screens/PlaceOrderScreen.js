@@ -12,6 +12,7 @@ import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 import axios from 'axios';
+import Container from 'react-bootstrap/Container';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -81,7 +82,7 @@ export default function PlaceOrderScreen() {
   }, [navigate, cart]);
 
   return (
-    <div>
+    <Container>
       <CheckoutSteps step1 step2 step3 step4 />
       <Helmet>
         <title>Preview Order</title>
@@ -190,6 +191,6 @@ export default function PlaceOrderScreen() {
           </Card>
         </Col>
       </Row>
-    </div>
+    </Container>
   );
 }

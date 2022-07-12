@@ -8,6 +8,7 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { Store } from '../Store';
 import { getError } from '../utils';
+import Container from 'react-bootstrap/Container';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -76,7 +77,7 @@ export default function OrdersListScreen() {
   };
 
   return (
-    <div>
+    <Container>
       <Helmet>
         <title>Orders</title>
       </Helmet>
@@ -137,6 +138,6 @@ export default function OrdersListScreen() {
           </tbody>
         </table>
       )}
-    </div>
+    </Container>
   );
 }

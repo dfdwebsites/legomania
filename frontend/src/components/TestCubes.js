@@ -19,7 +19,11 @@ export default function Model(props) {
     loader.setPartsLibraryPath('/assets/');
   });
 
+  const stepsHandler = props.stepsHandler;
+  stepsHandler();
+
   const t = useThree();
+
   console.log(t);
 
   const mesh = useRef(null);
@@ -36,7 +40,7 @@ export default function Model(props) {
   // });
   const bbox = new THREE.Box3().setFromObject(obj);
   const size = bbox.getSize(new THREE.Vector3());
-  const radius = Math.max(size.x, Math.max(size.y, size.z)) * 0.5;
+  const radius = Math.max(size.x, Math.max(size.y, size.z)) * 0.3;
 
   t.camera.position.set(-2.3, 1, 2).multiplyScalar(radius);
 
@@ -88,7 +92,6 @@ export default function Model(props) {
 
   return (
     <>
-      {/* <OrbitControls target={bbox.getCenter(new THREE.Vector3())} /> */}
       <primitive object={obj} ref={mesh} position={[0, 0, 0]} />
     </>
   );

@@ -13,6 +13,7 @@ import { Store } from '../Store';
 import { getError } from '../utils';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Container from 'react-bootstrap/Container';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -139,7 +140,7 @@ export default function OrderDetailsScreen() {
   ) : error ? (
     <MessageBox variant="danger">{error}</MessageBox>
   ) : (
-    <div>
+    <Container>
       <Helmet>
         <title>Order {orderId}</title>
       </Helmet>
@@ -260,6 +261,6 @@ export default function OrderDetailsScreen() {
           </Card>
         </Col>
       </Row>
-    </div>
+    </Container>
   );
 }

@@ -9,6 +9,7 @@ import MessageBox from '../components/MessageBox';
 import { Store } from '../Store';
 import { getError } from '../utils';
 import { toast } from 'react-toastify';
+import Container from 'react-bootstrap/Container';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -126,7 +127,7 @@ export default function ProductListScreen() {
   };
 
   return (
-    <div>
+    <Container>
       <Row>
         <Col>
           {' '}
@@ -199,6 +200,6 @@ export default function ProductListScreen() {
           </div>
         </>
       )}
-    </div>
+    </Container>
   );
 }

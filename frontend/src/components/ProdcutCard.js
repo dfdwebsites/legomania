@@ -40,6 +40,10 @@ export default function ProdcutCard(props) {
           <Card.Title>{product.name}</Card.Title>
 
           <Card.Text>{product.details}</Card.Text>
+          <div className="d-flex justify-content-between mb-3">
+            Price: ${product.price}{' '}
+            <Link to={`/product/${product.slug}`}>Learn more..</Link>
+          </div>
           <Button variant="primary" onClick={() => addToCartHandler(product)}>
             Add to Cart
           </Button>

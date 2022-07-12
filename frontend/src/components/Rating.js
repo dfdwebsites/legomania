@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function Rating(props) {
-  const { rating, numReviews, slug } = props;
+  const { rating, numReviews, slug, caption } = props;
   return (
     <div className="rating">
       <span>
@@ -59,10 +59,20 @@ export default function Rating(props) {
           }
         ></i>
       </span>
-      <a style={{ textDecoration: 'none' }} href={`/product/${slug}#reviews`}>
-        {' '}
-        ({numReviews}){' '}
-      </a>
+      {caption ? (
+        <span>{caption}</span>
+      ) : (
+        <>
+          <span>{` ${numReviews} reviews`}</span>
+          <a
+            style={{ textDecoration: 'none' }}
+            href={`/product/${slug}#reviews`}
+          >
+            {' '}
+            ({numReviews}){' '}
+          </a>
+        </>
+      )}
     </div>
   );
 }

@@ -72,6 +72,7 @@ export default function ProductEditScreen() {
   const [category, setCategory] = useState('');
   const [countInStock, setCountInStock] = useState('');
   const [description, setDescription] = useState('');
+  const [isFeatured, setIsFeatured] = useState(false);
 
   useEffect(() => {
     const featchData = async () => {
@@ -86,6 +87,7 @@ export default function ProductEditScreen() {
         setCategory(data.category);
         setCountInStock(data.countInStock);
         setDescription(data.description);
+        setIsFeatured(data.isFeatured);
 
         dispatch({ type: 'FETCH_SUCCESS' });
       } catch (err) {
@@ -110,7 +112,8 @@ export default function ProductEditScreen() {
           images,
           category,
           countInStock,
-          description
+          description,
+          isFeatured
         },
         {
           headers: { authorization: `Bearer ${userInfo.token}` }
@@ -254,6 +257,15 @@ export default function ProductEditScreen() {
               onChange={(e) => setCountInStock(e.target.value)}
             />
           </Form.Group>
+
+          <Form.Check
+            className="mb-3"
+            id="isFeatured"
+            type="checkbox"
+            label="isFeatured"
+            checked={isFeatured}
+            onChange={(e) => setIsFeatured(e.target.checked)}
+          />
 
           <Form.Group className="mb-3" controlId="description">
             <Form.Label>Description</Form.Label>

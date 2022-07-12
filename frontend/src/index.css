@@ -407,6 +407,9 @@ thead tr {
 button.thumbnail {
   padding: 0;
 }
+button.thumbnail img {
+  max-width: 150px;
+}
 
 /* starting */
 
@@ -470,4 +473,12 @@ button.thumbnail {
 
 .rating i {
   color: #ffd500;
+}
+
+footer img {
+  width: 200px;
+}
+
+.hero {
+  min-height: 50vh;
 }

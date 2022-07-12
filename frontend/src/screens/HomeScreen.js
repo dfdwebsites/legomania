@@ -1,10 +1,14 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import LoadingBox from '../components/LoadingBox';
 import ProdcutCard from '../components/ProdcutCard';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
+import Button from 'react-bootstrap/esm/Button';
+import CanvasBG from '../components/CanvasBG';
+import Container from 'react-bootstrap/Container';
+import { Link } from 'react-router-dom';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -26,6 +30,8 @@ export default function HomeScreen() {
     error: ''
   });
 
+  const [activeProduct, setActiveProduct] = useState(0);
+
   useEffect(() => {
     const fetchdata = async () => {
       try {
@@ -39,30 +45,97 @@ export default function HomeScreen() {
     fetchdata();
   }, []);
 
-  console.log(products);
+  const getLatestProducts = (num) => {
+    let latestProducts = products.sort((a, b) => {
+      let da = new Date(a.createdAt),
+        db = new Date(b.createdAt);
+      return db - da;
+    });
+
+    return latestProducts.slice(0, num);
+  };
+
+  const getFeaturedProducts = () => {
+    let featuredProducts = products.filter((x) => x.isFeatured);
+    return featuredProducts;
+  };
+
   return (
     <div>
-      <Helmet>
-        <title>LegoMania</title>
-      </Helmet>
-      {loading ? (
-        <LoadingBox />
-      ) : (
-        <Row>
-          {products.map((product) => (
-            <Col key={product.slug} sm={6} md={4} ls={3} className="mb-3">
-              <ProdcutCard product={product} />
-            </Col>
-          ))}
-        </Row>
-      )}
-      <canvas className="main-bg-canvas"></canvas>
-      {/* <Link to="/product/car">car</Link> <Link to="/product/boat">boat</Link>{' '}
-      <Link to="/product/cafe">cafe</Link> <Link to="/product/4955">truck</Link>{' '}
-      <Link to="/product/fast-car">fast car</Link>
-      <Link to="/product/offroad-power">Off Road</Link>
-      <Link to="/product/truck">OTHER truck</Link>
-      <LoadingBox /> */}
+      <CanvasBG />
+      <Container>
+        <div>
+          <Helmet>
+            <title>LegoMania</title>
+          </Helmet>
+          {loading ? (
+            <LoadingBox />
+          ) : (
+            <>
+              <div className="hero">
+                <div className="d-flex">
+                  <div className="imgContainer me-3">
+                    <img
+                      className="img-large"
+                      src={products[activeProduct].image}
+                      alt={products[activeProduct].name}
+                    />
+                  </div>
+                  <div className="d-flex flex-column">
+                    <p>{products[activeProduct].description}</p>
+                    <Link to={`/product/${products[activeProduct].slug}`}>
+                      See more...
+                    </Link>
+                  </div>
+                </div>
+                <Button
+                  onClick={() =>
+                    setActiveProduct((prev) => {
+                      let newProduct = prev - 1;
+                      if (newProduct < 0) {
+                        newProduct = products.length - 1;
+                      }
+                      return newProduct;
+                    })
+                  }
+                >
+                  <i className="fas fa-chevron-left"></i>
+                </Button>
+                <Button
+                  onClick={() =>
+                    setActiveProduct((prev) => {
+                      let newProduct = prev + 1;
+                      if (newProduct > products.length - 1) {
+                        newProduct = 0;
+                      }
+                      return newProduct;
+                    })
+                  }
+                >
+                  <i className="fas fa-chevron-right"></i>
+                </Button>
+              </div>
+
+              <Row className="my-5">
+                <h2>Latest Products</h2>
+                {getLatestProducts(3).map((product) => (
+                  <Col key={product.slug} sm={6} md={4} ls={3} className="mb-5">
+                    <ProdcutCard product={product} />
+                  </Col>
+                ))}
+              </Row>
+              <Row className="my-5">
+                <h2>Featured Products</h2>
+                {getFeaturedProducts().map((product) => (
+                  <Col key={product.slug} sm={6} md={4} ls={3} className="mb-5">
+                    <ProdcutCard product={product} />
+                  </Col>
+                ))}
+              </Row>
+            </>
+          )}
+        </div>
+      </Container>
     </div>
   );
 }

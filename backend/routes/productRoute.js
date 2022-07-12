@@ -21,6 +21,7 @@ productRouter.post(
       image: '/images/test.jpg',
       category: 'sample category',
       description: 'sample description',
+      isFeatured: false,
       price: 0,
       countInStock: 0,
       rating: 0,
@@ -47,6 +48,7 @@ productRouter.put(
       product.category = req.body.category;
       product.countInStock = req.body.countInStock;
       product.description = req.body.description;
+      product.isFeatured = Boolean(req.body.isFeatured);
       await product.save();
       res.send({ message: 'Product Updated' });
     } else {
