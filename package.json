@@ -1,0 +1,21 @@
+{
+  "name": "legomania",
+  "version": "1.0.0",
+  "description": "sample e-shop created with react for showcase purpose only",
+  "main": "index.js",
+  "scripts": {
+    "build": "cd backend && npm install && cd ../frontend && npm install && npm run build",
+    "start": "node backend/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dfdwebsites/legomania.git"
+  },
+  "author": "Iordanis Tselepids",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dfdwebsites/legomania/issues"
+  },
+  "homepage": "https://github.com/dfdwebsites/legomania#readme"
+}
