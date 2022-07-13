@@ -1,6 +1,7 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Card from 'react-bootstrap/Card';
 import LoadingBox from '../components/LoadingBox';
 import ProdcutCard from '../components/ProdcutCard';
 import axios from 'axios';
@@ -9,6 +10,8 @@ import Button from 'react-bootstrap/esm/Button';
 import CanvasBG from '../components/CanvasBG';
 import Container from 'react-bootstrap/Container';
 import { Link } from 'react-router-dom';
+import CartConfirm from '../components/CartConfirm';
+import { LinkContainer } from 'react-router-bootstrap';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -31,7 +34,8 @@ export default function HomeScreen() {
   });
 
   const [activeProduct, setActiveProduct] = useState(0);
-
+  const rightRef = useRef();
+  const leftRef = useRef();
   useEffect(() => {
     const fetchdata = async () => {
       try {
@@ -52,7 +56,7 @@ export default function HomeScreen() {
       return db - da;
     });
 
-    return latestProducts.slice(0, num);
+    return latestProducts.slice(0, num + 1);
   };
 
   const getFeaturedProducts = () => {
@@ -72,23 +76,140 @@ export default function HomeScreen() {
             <LoadingBox />
           ) : (
             <>
-              <div className="hero">
-                <div className="d-flex">
-                  <div className="imgContainer me-3">
-                    <img
-                      className="img-large"
-                      src={products[activeProduct].image}
-                      alt={products[activeProduct].name}
-                    />
-                  </div>
-                  <div className="d-flex flex-column">
-                    <p>{products[activeProduct].description}</p>
-                    <Link to={`/product/${products[activeProduct].slug}`}>
-                      See more...
-                    </Link>
-                  </div>
-                </div>
-                <Button
+              <div className="hero pt-2">
+                <Row>
+                  <Col xs={2} sm={2} md={2}>
+                    <Card
+                      className="card-small"
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => leftRef.current.click()}
+                    >
+                      <Card.Img
+                        className="mb-3 img-large"
+                        src={
+                          products[
+                            activeProduct - 1 < 0
+                              ? products.length - 1
+                              : activeProduct - 1
+                          ].image
+                        }
+                        alt={
+                          products[
+                            activeProduct - 1 < 0
+                              ? products.length - 1
+                              : activeProduct - 1
+                          ].name
+                        }
+                      />
+                      <Card.Title className="text-center hero-small-card-title">
+                        {' '}
+                        {
+                          products[
+                            activeProduct - 1 < 0
+                              ? products.length - 1
+                              : activeProduct - 1
+                          ].name
+                        }{' '}
+                      </Card.Title>
+                    </Card>
+                  </Col>
+                  <Col xs={8} md={8} className="p-0">
+                    <Card>
+                      <Link to={`/product/${products[activeProduct].slug}`}>
+                        <Card.Img
+                          className="mb-3 img-large"
+                          src={products[activeProduct].image}
+                          alt={products[activeProduct].name}
+                        />
+                      </Link>
+                      <Card.Body>
+                        <Card.Title className="mb-3">
+                          {' '}
+                          {products[activeProduct].name}{' '}
+                        </Card.Title>{' '}
+                        <p>{products[activeProduct].description}</p>
+                        <div className="mb-3">
+                          {' '}
+                          <Link to={`/product/${products[activeProduct].slug}`}>
+                            See more...
+                          </Link>
+                        </div>
+                        <Row>
+                          <Col>
+                            <Button
+                              ref={leftRef}
+                              onClick={() =>
+                                setActiveProduct((prev) => {
+                                  let newProduct = prev - 1;
+                                  if (newProduct < 0) {
+                                    newProduct = products.length - 1;
+                                  }
+                                  return newProduct;
+                                })
+                              }
+                            >
+                              <i className="fas fa-chevron-left"></i>
+                            </Button>
+                          </Col>
+                          <Col className="d-flex justify-content-end">
+                            <Button
+                              ref={rightRef}
+                              onClick={() =>
+                                setActiveProduct((prev) => {
+                                  let newProduct = prev + 1;
+                                  if (newProduct > products.length - 1) {
+                                    newProduct = 0;
+                                  }
+                                  return newProduct;
+                                })
+                              }
+                            >
+                              <i className="fas fa-chevron-right"></i>
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                  <Col xs={2} sm={2} md={2}>
+                    <Card
+                      className="card-small"
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => rightRef.current.click()}
+                    >
+                      <Card.Img
+                        className="mb-3 img-large"
+                        src={
+                          products[
+                            activeProduct + 1 > products.length - 1
+                              ? 0
+                              : activeProduct + 1
+                          ].image
+                        }
+                        alt={
+                          products[
+                            activeProduct + 1 > products.length - 1
+                              ? 0
+                              : activeProduct + 1
+                          ].name
+                        }
+                      />
+
+                      <Card.Title className="text-center hero-small-card-title">
+                        {' '}
+                        {
+                          products[
+                            activeProduct + 1 > products.length - 1
+                              ? 0
+                              : activeProduct + 1
+                          ].name
+                        }{' '}
+                      </Card.Title>
+                    </Card>
+                  </Col>
+                </Row>
+
+                {/* <Button
                   onClick={() =>
                     setActiveProduct((prev) => {
                       let newProduct = prev - 1;
@@ -113,12 +234,12 @@ export default function HomeScreen() {
                   }
                 >
                   <i className="fas fa-chevron-right"></i>
-                </Button>
+                </Button> */}
               </div>
 
               <Row className="my-5">
                 <h2>Latest Products</h2>
-                {getLatestProducts(3).map((product) => (
+                {getLatestProducts(2).map((product) => (
                   <Col key={product.slug} sm={6} md={4} ls={3} className="mb-5">
                     <ProdcutCard product={product} />
                   </Col>
