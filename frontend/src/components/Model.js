@@ -117,7 +117,7 @@ export default function Model(props) {
 
   const animationChanged = (num) => {
     if (group && group.current && group.current.children) {
-      if (num > 700) {
+      if (num > 1000) {
         gsap.set(group.current.children[0].rotation, {
           y: Math.PI
         });

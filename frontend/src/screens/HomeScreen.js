@@ -237,7 +237,7 @@ export default function HomeScreen() {
                 </Button> */}
               </div>
 
-              <Row className="my-5">
+              <Row className="latest-container">
                 <h2>Latest Products</h2>
                 {getLatestProducts(2).map((product) => (
                   <Col key={product.slug} sm={6} md={4} ls={3} className="mb-5">
@@ -245,7 +245,7 @@ export default function HomeScreen() {
                   </Col>
                 ))}
               </Row>
-              <Row className="my-5">
+              <Row className="featured-container">
                 <h2>Featured Products</h2>
                 {getFeaturedProducts().map((product) => (
                   <Col key={product.slug} sm={6} md={4} ls={3} className="mb-5">

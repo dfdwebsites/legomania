@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Link, Routes } from 'react-router-dom';
 import { useContext, useEffect, useReducer, useRef, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProductScreen from './screens/ProductScreen';
 import HomeScreen from './screens/HomeScreen';
@@ -37,6 +37,7 @@ import UserEditScreen from './screens/UserEditScreen';
 import ProductEditScreen from './screens/ProductEditScreen';
 import SearchScreen from './screens/SearchScreen';
 import TestScreen from './screens/TestScreen';
+import MinifigureScreen from './screens/MinifigureScreen';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -65,7 +66,9 @@ function App() {
     '/images/avatar-3.png',
     '/images/avatar-4.png',
     '/images/avatar-5.png',
-    '/images/avatar-6.png'
+    '/images/avatar-6.png',
+    '/images/avatar-7.png',
+    '/images/avatar-8.png'
   ];
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -77,10 +80,6 @@ function App() {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('shippingAddress');
     window.location.href = '/signin';
-  };
-
-  const rotateHandler = (mesh) => {
-    mesh.rotation.y += Math.PI;
   };
 
   useEffect(() => {
@@ -144,40 +143,42 @@ function App() {
       >
         <ToastContainer position="bottom-center" limit={1} />
         <header>
-          <nav className="main-nav d-flex justify-content-between align-items-center w-100 px-3 pt-2">
+          <nav className="main-nav d-flex justify-content-between align-items-center w-100 px-3 pt-3">
             <div>
               {userInfo ? (
                 <>
-                  <NavDropdown title={userInfo.name} className="dropMan">
-                    <div className="avatar-container">
-                      <button className="avatar-btn" onClick={openAvatars}>
-                        <img
-                          src={userInfo.avatar}
-                          alt="lego head for avatar"
-                          className="avatar"
-                        />
-                      </button>
-                      <div
-                        ref={avatarContainerRef}
-                        className="avatar-choise-container"
-                      >
-                        {avatars.map((avatarImg) => (
-                          <Col
-                            key={avatarImg}
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            className="d-flex justify-content-center"
-                          >
-                            <button onClick={() => setAvatarImg(avatarImg)}>
-                              <img src={avatarImg} alt="lego head for avatar" />
-                            </button>
-                          </Col>
-                        ))}
-                        {loading && <LoadingBox />}
-                      </div>
+                  <div className="avatar-container">
+                    <button
+                      className="avatar-btn"
+                      onClick={openAvatars}
+                      style={{ backgroundImage: `url(${userInfo.avatar})` }}
+                    ></button>
+                    <div
+                      ref={avatarContainerRef}
+                      className="avatar-choise-container px-2"
+                    >
+                      {avatars.map((avatarImg) => (
+                        <Col
+                          key={avatarImg}
+                          xs={12}
+                          sm={6}
+                          md={4}
+                          className="d-flex justify-content-center"
+                        >
+                          <button onClick={() => setAvatarImg(avatarImg)}>
+                            <img src={avatarImg} alt="lego head for avatar" />
+                          </button>
+                        </Col>
+                      ))}
+                      {loading && <LoadingBox />}
                     </div>
-
+                  </div>
+                  <NavDropdown
+                    title={`${userInfo.name.slice(0, 9)}${
+                      userInfo.name.length > 9 ? '...' : ''
+                    }`}
+                    className="dropMan"
+                  >
                     <LinkContainer to="/profile">
                       <NavDropdown.Item>Profile</NavDropdown.Item>
                     </LinkContainer>
@@ -200,11 +201,34 @@ function App() {
                   Sign In
                 </Link>
               )}
+            </div>
+            <div className="d-flex flex-column justify-content-between align-items-center logo">
+              <Link to="/">
+                <img className="img-large" src="/images/logo.jpg" alt="logo" />
+              </Link>
+            </div>
+
+            <div className="nav-icon d-flex flex-column align-items-center">
+              <Link to="/cart">
+                <img
+                  src={
+                    cart && cart.cartItems.length > 0
+                      ? '/images/cart-full.png'
+                      : '/images/cart.png'
+                  }
+                  alt="logo"
+                />
+                {cart.cartItems.length > 0 && (
+                  <Badge pill bg="warning" className="badge-pill">
+                    {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
+                  </Badge>
+                )}
+              </Link>
               {userInfo && userInfo.isAdmin && (
                 <NavDropdown
                   title="Admin"
                   id="admin-nav-dropdown"
-                  className="d-flex align-items-center test"
+                  className="d-flex align-items-center dropMan"
                 >
                   <LinkContainer to="/admin/dashboard">
                     <NavDropdown.Item>Dashboard</NavDropdown.Item>
@@ -220,29 +244,6 @@ function App() {
                   </LinkContainer>
                 </NavDropdown>
               )}
-            </div>
-            <div className="d-flex flex-column justify-content-between align-items-center logo">
-              <Link to="/">
-                <img className="img-large" src="/images/logo.jpg" alt="logo" />
-              </Link>
-            </div>
-
-            <div className="nav-icon d-flex  align-items-center">
-              <Link className="mb-2" to="/cart">
-                <img
-                  src={
-                    cart && cart.cartItems.length > 0
-                      ? '/images/cart-full.png'
-                      : '/images/cart.png'
-                  }
-                  alt="logo"
-                />
-                {cart.cartItems.length > 0 && (
-                  <Badge pill bg="warning" className="badge-pill">
-                    {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
-                  </Badge>
-                )}
-              </Link>
             </div>
           </nav>
           <div className="search-container d-flex justify-content-center align-items-center">
@@ -297,6 +298,48 @@ function App() {
           <Nav className="flex-column text-white w-100 p-2">
             <Nav.Item>
               <strong>Categories</strong>
+              <button
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  position: 'absolute',
+                  top: '90px',
+                  right: '0',
+                  height: '50px'
+                }}
+                onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
+              >
+                <Row>
+                  {' '}
+                  <i
+                    className={`${
+                      sidebarIsOpen
+                        ? 'fas fa-long-arrow-alt-left'
+                        : 'fas fa-long-arrow-alt-right'
+                    }`}
+                  ></i>
+                </Row>
+                <Row>
+                  {' '}
+                  <i
+                    className={`${
+                      sidebarIsOpen
+                        ? 'fas fa-long-arrow-alt-left'
+                        : 'fas fa-long-arrow-alt-right'
+                    }`}
+                  ></i>
+                </Row>
+                <Row>
+                  {' '}
+                  <i
+                    className={`${
+                      sidebarIsOpen
+                        ? 'fas fa-long-arrow-alt-left'
+                        : 'fas fa-long-arrow-alt-right'
+                    }`}
+                  ></i>
+                </Row>
+              </button>
             </Nav.Item>
 
             <Nav.Item>
@@ -315,6 +358,10 @@ function App() {
         </div>
         <main>
           <Routes>
+            <Route
+              path="/product/create-your-own-minifigure"
+              element={<MinifigureScreen />}
+            />
             <Route path="/product/:slug" element={<ProductScreen />} />
             <Route path="/cart" element={<CartScreen />} />
             <Route path="/signin" element={<SigninScreen />} />

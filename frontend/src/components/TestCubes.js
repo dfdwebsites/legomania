@@ -19,9 +19,6 @@ export default function Model(props) {
     loader.setPartsLibraryPath('/assets/');
   });
 
-  const stepsHandler = props.stepsHandler;
-  stepsHandler();
-
   const t = useThree();
 
   console.log(t);

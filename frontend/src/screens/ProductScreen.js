@@ -148,16 +148,12 @@ export default function ProductScreen() {
     }
   };
 
-  const stepsHandler = () => {
-    console.log('stepsChanged');
-  };
-
   return loading ? (
     <LoadingBox />
   ) : error ? (
     <MessageBox varient="danger">{error}</MessageBox>
   ) : (
-    <Container>
+    <Container className="mt-4">
       <Row>
         <Col md={9} style={{ position: 'relative' }}>
           <button
@@ -176,7 +172,6 @@ export default function ProductScreen() {
 
                 <Model
                   url={`models/${slug.includes('sample') ? 'car' : slug}.mpd`}
-                  stepsHandler={stepsHandler}
                 />
 
                 <OrbitControls />

@@ -9,8 +9,11 @@ export default function Footer() {
         <Col className="d-flex align-items-center">
           <img src="/images/logo.jpg" alt="logo" />
         </Col>
-        <Col className="d-flex flex-column align-items-center">
-          <p className="mb-2" style={{ color: 'white', fontWeight: 'bold' }}>
+        <Col className="d-flex flex-column align-items-end ">
+          <p
+            className="mb-2 pe-3"
+            style={{ color: 'white', fontWeight: 'bold' }}
+          >
             FOLLOW US
           </p>
           <div className="d-flex">
