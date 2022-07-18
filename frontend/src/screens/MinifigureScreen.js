@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import React, {
+  Suspense,
   useContext,
   useEffect,
   useReducer,
@@ -33,6 +34,7 @@ import LoadingBox from '../components/LoadingBox';
 import { Link } from 'react-router-dom';
 import { HexColorPicker } from 'react-colorful';
 import { proxy, useSnapshot } from 'valtio';
+import LoaderTHREE from '../components/LoaderTHREE';
 
 const colorState = proxy({
   items: {
@@ -87,7 +89,7 @@ function Picker() {
 }
 
 export default function MinifigureScreen() {
-  let reviewsRef = useRef();
+  let reviewsRef = useRef('');
   const snap = useSnapshot(colorState);
 
   const [rating, setRating] = useState(0);
@@ -547,66 +549,67 @@ export default function MinifigureScreen() {
                 // shadow-bias={-0.0001}
               />
               <OrbitControls enablePan={false} />
-
-              <group ref={group} position-y={-0.5} position-z={0}>
-                <mesh
-                  name="Torso"
-                  geometry={nodes.torso.geometry}
-                  material={torsoMaterial}
-                  // position={[0, -15, 0]}
-                  // rotation={[Math.PI / 2, 0, 0]}
-                />
-                <mesh
-                  name="Head"
-                  geometry={nodes.head.geometry}
-                  material={faceMaterial}
-                  position={[0, 1.8, 0]}
-                  // rotation={[Math.PI / 2, 0, 0]}
-                  // {...extras}
-                />
-                <mesh
-                  name="Hands"
-                  geometry={nodes.hands.geometry}
-                  material={handsMaterial}
-                  position={[-0.87, 1.35, 0]}
-                  rotation={[0, 0, 0]}
-                />
-                <mesh
-                  name="waist"
-                  geometry={nodes.waist.geometry}
-                  material={waisteMaterial}
-                  // position={[-0.87, 1.45, 0]}
-                  // rotation={[0, 0, 0]}
-                />
-                <mesh
-                  name="leftFoot"
-                  geometry={nodes.leftFoot.geometry}
-                  material={rightFootMaterial}
-                  position={[-0.57, -0.5, 0]}
-                  // rotation={[0, 0, 0]}
-                />
-                <mesh
-                  name="rightFoot"
-                  geometry={nodes.rightFoot.geometry}
-                  material={leftFootMaterial}
-                  position={[0.57, -0.5, 0]}
-                  // rotation={[0, Math.PI, 0]}
-                />
-                <mesh
-                  name="hat"
-                  geometry={nodes.hat.geometry}
-                  material={hatMaterial}
-                  position={[0, 3.1, 0]}
-                  // rotation={[0, Math.PI, 0]}
-                />
-                <mesh
-                  name="hatAccessory"
-                  geometry={nodes.hatAccessory.geometry}
-                  material={hatAccessMaterial}
-                  position={[0, 3.6, 0]}
-                  // rotation={[0, Math.PI, 0]}
-                />
-              </group>
+              <Suspense fallback={<LoaderTHREE />}>
+                <group ref={group} position-y={-0.5} position-z={0}>
+                  <mesh
+                    name="Torso"
+                    geometry={nodes.torso.geometry}
+                    material={torsoMaterial}
+                    // position={[0, -15, 0]}
+                    // rotation={[Math.PI / 2, 0, 0]}
+                  />
+                  <mesh
+                    name="Head"
+                    geometry={nodes.head.geometry}
+                    material={faceMaterial}
+                    position={[0, 1.8, 0]}
+                    // rotation={[Math.PI / 2, 0, 0]}
+                    // {...extras}
+                  />
+                  <mesh
+                    name="Hands"
+                    geometry={nodes.hands.geometry}
+                    material={handsMaterial}
+                    position={[-0.87, 1.35, 0]}
+                    rotation={[0, 0, 0]}
+                  />
+                  <mesh
+                    name="waist"
+                    geometry={nodes.waist.geometry}
+                    material={waisteMaterial}
+                    // position={[-0.87, 1.45, 0]}
+                    // rotation={[0, 0, 0]}
+                  />
+                  <mesh
+                    name="leftFoot"
+                    geometry={nodes.leftFoot.geometry}
+                    material={rightFootMaterial}
+                    position={[-0.57, -0.5, 0]}
+                    // rotation={[0, 0, 0]}
+                  />
+                  <mesh
+                    name="rightFoot"
+                    geometry={nodes.rightFoot.geometry}
+                    material={leftFootMaterial}
+                    position={[0.57, -0.5, 0]}
+                    // rotation={[0, Math.PI, 0]}
+                  />
+                  <mesh
+                    name="hat"
+                    geometry={nodes.hat.geometry}
+                    material={hatMaterial}
+                    position={[0, 3.1, 0]}
+                    // rotation={[0, Math.PI, 0]}
+                  />
+                  <mesh
+                    name="hatAccessory"
+                    geometry={nodes.hatAccessory.geometry}
+                    material={hatAccessMaterial}
+                    position={[0, 3.6, 0]}
+                    // rotation={[0, Math.PI, 0]}
+                  />
+                </group>
+              </Suspense>
             </Canvas>
           </CanvasContainer>
         </Col>

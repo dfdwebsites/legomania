@@ -1,5 +1,12 @@
 import { BrowserRouter, Route, Link, Routes } from 'react-router-dom';
-import { useContext, useEffect, useReducer, useRef, useState } from 'react';
+import {
+  Suspense,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useState
+} from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProductScreen from './screens/ProductScreen';
@@ -360,7 +367,11 @@ function App() {
           <Routes>
             <Route
               path="/product/create-your-own-minifigure"
-              element={<MinifigureScreen />}
+              element={
+                <Suspense fallback={<LoadingBox />}>
+                  <MinifigureScreen />
+                </Suspense>
+              }
             />
             <Route path="/product/:slug" element={<ProductScreen />} />
             <Route path="/cart" element={<CartScreen />} />
