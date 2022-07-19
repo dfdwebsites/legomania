@@ -64,21 +64,21 @@ export default function HomeScreen() {
     return featuredProducts;
   };
 
+  console.log(products);
   return (
     <div>
-      <CanvasBG />
-      <Container>
-        <div>
-          <Helmet>
-            <title>LegoMania</title>
-          </Helmet>
-          {loading ? (
-            <LoadingBox />
-          ) : (
-            <>
-              <div className="hero pt-2">
-                <Row>
-                  <Col xs={2} sm={2} md={2}>
+      <div>
+        <Helmet>
+          <title>LegoMania</title>
+        </Helmet>
+        {loading ? (
+          <LoadingBox />
+        ) : (
+          <>
+            <div className="hero pt-5 px-5">
+              <Container>
+                <Row className="justify-content-between">
+                  {/* <Col xs={2} sm={2} md={2}>
                     <Card
                       className="card-small"
                       style={{ cursor: 'pointer' }}
@@ -112,69 +112,49 @@ export default function HomeScreen() {
                         }{' '}
                       </Card.Title>
                     </Card>
-                  </Col>
-                  <Col xs={8} md={8} className="p-0">
-                    <Card>
+                  </Col> */}
+                  <Col
+                    className="p-0"
+                    style={{ maxWidth: '500px', marginLeft: '1rem' }}
+                  >
+                    <div style={{ color: 'white' }}>
                       <Link to={`/product/${products[activeProduct].slug}`}>
-                        <Card.Img
+                        <img
+                          style={{
+                            borderRadius: '50%',
+                            aspectRatio: '1/1',
+                            objectFit: 'cover',
+                            transition: '.25s'
+                          }}
+                          onMouseEnter={(e) =>
+                            (e.target.style.borderRadius = 0)
+                          }
+                          onMouseLeave={(e) =>
+                            (e.target.style.borderRadius = '50%')
+                          }
                           className="mb-3 img-large"
                           src={products[activeProduct].image}
                           alt={products[activeProduct].name}
                         />
                       </Link>
-                      <Card.Body>
-                        <Card.Title className="mb-3">
-                          {' '}
-                          {products[activeProduct].name}{' '}
-                        </Card.Title>{' '}
-                        <p>{products[activeProduct].description}</p>
-                        <div className="mb-3">
-                          {' '}
-                          <Link to={`/product/${products[activeProduct].slug}`}>
-                            See more...
-                          </Link>
-                        </div>
-                        <Row>
-                          <Col>
-                            <Button
-                              ref={leftRef}
-                              onClick={() =>
-                                setActiveProduct((prev) => {
-                                  let newProduct = prev - 1;
-                                  if (newProduct < 0) {
-                                    newProduct = products.length - 1;
-                                  }
-                                  return newProduct;
-                                })
-                              }
-                            >
-                              <i className="fas fa-chevron-left"></i>
-                            </Button>
-                          </Col>
-                          <Col className="d-flex justify-content-end">
-                            <Button
-                              ref={rightRef}
-                              onClick={() =>
-                                setActiveProduct((prev) => {
-                                  let newProduct = prev + 1;
-                                  if (newProduct > products.length - 1) {
-                                    newProduct = 0;
-                                  }
-                                  return newProduct;
-                                })
-                              }
-                            >
-                              <i className="fas fa-chevron-right"></i>
-                            </Button>
-                          </Col>
-                        </Row>
-                      </Card.Body>
-                    </Card>
+                      <h2 className="mb-3"> {products[activeProduct].name} </h2>{' '}
+                      <p>{products[activeProduct].description}</p>
+                      <div className="mb-3">
+                        {' '}
+                        <Link
+                          className="hero-link"
+                          to={`/product/${products[activeProduct].slug}`}
+                        >
+                          See more...
+                        </Link>
+                      </div>
+                    </div>
                   </Col>
-                  <Col xs={2} sm={2} md={2}>
+
+                  {/* <Col style={{ maxWidth: '230px' }}>
                     <Card
                       className="card-small"
-                      style={{ cursor: 'pointer' }}
+                      style={{ cursor: 'pointer', backdropFilter: 'blur(1px)' }}
                       onClick={() => rightRef.current.click()}
                     >
                       <Card.Img
@@ -206,6 +186,75 @@ export default function HomeScreen() {
                         }{' '}
                       </Card.Title>
                     </Card>
+                  </Col> */}
+                </Row>
+                <Row className="mt-4">
+                  <Col>
+                    <Button
+                      ref={leftRef}
+                      onClick={() =>
+                        setActiveProduct((prev) => {
+                          let newProduct = prev - 1;
+                          if (newProduct < 0) {
+                            newProduct = products.length - 1;
+                          }
+                          return newProduct;
+                        })
+                      }
+                    >
+                      <i className="fas fa-chevron-left"></i> Prev{' '}
+                      <img
+                        style={{ width: '50px' }}
+                        src={
+                          products[
+                            activeProduct - 1 < 0
+                              ? products.length - 1
+                              : activeProduct - 1
+                          ].image
+                        }
+                        alt={
+                          products[
+                            activeProduct - 1 < 0
+                              ? products.length - 1
+                              : activeProduct - 1
+                          ].name
+                        }
+                      />
+                    </Button>
+                  </Col>
+
+                  <Col className="d-flex justify-content-end">
+                    <Button
+                      ref={rightRef}
+                      onClick={() =>
+                        setActiveProduct((prev) => {
+                          let newProduct = prev + 1;
+                          if (newProduct > products.length - 1) {
+                            newProduct = 0;
+                          }
+                          return newProduct;
+                        })
+                      }
+                    >
+                      <img
+                        style={{ width: '50px' }}
+                        src={
+                          products[
+                            activeProduct + 1 > products.length - 1
+                              ? 0
+                              : activeProduct + 1
+                          ].image
+                        }
+                        alt={
+                          products[
+                            activeProduct + 1 > products.length - 1
+                              ? 0
+                              : activeProduct + 1
+                          ].name
+                        }
+                      />{' '}
+                      Next <i className="fas fa-chevron-right"></i>
+                    </Button>
                   </Col>
                 </Row>
 
@@ -235,28 +284,48 @@ export default function HomeScreen() {
                 >
                   <i className="fas fa-chevron-right"></i>
                 </Button> */}
-              </div>
-
-              <Row className="latest-container">
-                <h2>Latest Products</h2>
-                {getLatestProducts(2).map((product) => (
-                  <Col key={product.slug} sm={6} md={4} ls={3} className="mb-5">
-                    <ProdcutCard product={product} />
-                  </Col>
-                ))}
-              </Row>
-              <Row className="featured-container">
-                <h2>Featured Products</h2>
-                {getFeaturedProducts().map((product) => (
-                  <Col key={product.slug} sm={6} md={4} ls={3} className="mb-5">
-                    <ProdcutCard product={product} />
-                  </Col>
-                ))}
-              </Row>
-            </>
-          )}
-        </div>
-      </Container>
+              </Container>
+            </div>
+            <section className="latest">
+              <CanvasBG />
+              <Container>
+                <Row className="latest-container">
+                  <h2 className="mb-4">Latest Products</h2>
+                  {getLatestProducts(2).map((product) => (
+                    <Col
+                      key={product.slug}
+                      sm={6}
+                      md={4}
+                      ls={3}
+                      className="mb-5"
+                    >
+                      <ProdcutCard product={product} />
+                    </Col>
+                  ))}
+                </Row>
+              </Container>
+            </section>
+            <section className="featured">
+              <Container>
+                <Row className="featured-container">
+                  <h2 className="mb-4">Featured Products</h2>
+                  {getFeaturedProducts().map((product) => (
+                    <Col
+                      key={product.slug}
+                      sm={6}
+                      md={4}
+                      ls={3}
+                      className="mb-5"
+                    >
+                      <ProdcutCard product={product} />
+                    </Col>
+                  ))}
+                </Row>
+              </Container>
+            </section>
+          </>
+        )}
+      </div>
     </div>
   );
 }

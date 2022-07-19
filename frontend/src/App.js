@@ -140,12 +140,6 @@ function App() {
           sidebarIsOpen
             ? 'd-flex flex-column site-container active-cont'
             : 'd-flex flex-column site-container '
-          // fullBox
-          //   ? 'd-flex flex-column site-container active-cont full-box'
-          //   :
-          // : fullBox
-          // ? 'd-flex flex-column site-container full-box'
-          // : 'd-flex flex-column site-container '
         }
       >
         <ToastContainer position="bottom-center" limit={1} />
@@ -302,7 +296,7 @@ function App() {
               : ' side-navbar d-flex justify-content-between flex-wrap flex-column'
           }
         >
-          <Nav className="flex-column text-white w-100 p-2">
+          <Nav className="flex-column text-white w-100 p-4">
             <Nav.Item>
               <strong>Categories</strong>
               <button
@@ -357,7 +351,7 @@ function App() {
                   // to="/whatever"
                   onClick={() => setSidebarIsOpen(false)}
                 >
-                  <Nav.Link>{category}</Nav.Link>
+                  <Nav.Link className="side-nav-item">{category}</Nav.Link>
                 </LinkContainer>
               ))}
             </Nav.Item>

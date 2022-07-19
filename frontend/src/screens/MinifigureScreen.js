@@ -92,6 +92,7 @@ export default function MinifigureScreen() {
   let reviewsRef = useRef('');
   const snap = useSnapshot(colorState);
 
+  const [showHat, setShowHat] = useState(true);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [headExtra, setHeadExtra] = useState(0);
@@ -595,6 +596,7 @@ export default function MinifigureScreen() {
                     // rotation={[0, Math.PI, 0]}
                   />
                   <mesh
+                    visible={showHat}
                     name="hat"
                     geometry={nodes.hat.geometry}
                     material={hatMaterial}
@@ -602,6 +604,7 @@ export default function MinifigureScreen() {
                     // rotation={[0, Math.PI, 0]}
                   />
                   <mesh
+                    visible={showHat}
                     name="hatAccessory"
                     geometry={nodes.hatAccessory.geometry}
                     material={hatAccessMaterial}
@@ -729,19 +732,47 @@ export default function MinifigureScreen() {
           ) : arrayOfOptions.part === 'hands' ? (
             <div className="d-flex">
               <Picker />
-              <button
-                style={{ marginLeft: '40px', alignSelf: 'flex-start' }}
-                onClick={() => setOpenedOptions(false)}
-              >
-                <i className="fas fa-times"></i>
-              </button>
+              <div className="d-flex flex-column align-content-center justify-content-start">
+                <button
+                  style={{
+                    border: 'none',
+                    backgroundColor: 'white',
+                    marginTop: '15px'
+                  }}
+                  onClick={() => setOpenedOptions(false)}
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+                <button
+                  style={{
+                    border: 'none',
+                    backgroundColor: 'white',
+                    position: 'relative',
+                    width: '45px',
+                    height: '45px',
+                    marginTop: '15px'
+                  }}
+                  onClick={() => setShowHat((prev) => !prev)}
+                >
+                  <img className="hat-img" src="/images/hatIcon.png" />
+                  {showHat && (
+                    <img
+                      className="forbidden-img"
+                      src="/images/forbidden.png"
+                    />
+                  )}
+                </button>
+              </div>
             </div>
           ) : (
             <Col className="my-3 d-flex flex-wrap">
               {arrayOfOptions.options.map((o, i) => (
                 //o is gonna be an img src
                 <Col md={2} key={i} className="d-flex flex-column">
-                  <button onClick={() => changeTexutre(arrayOfOptions.part, o)}>
+                  <button
+                    className="choise-btn"
+                    onClick={() => changeTexutre(arrayOfOptions.part, o)}
+                  >
                     <img
                       src={o.src}
                       style={{ width: '80px' }}
@@ -753,12 +784,38 @@ export default function MinifigureScreen() {
                   </span>
                 </Col>
               ))}
-              <button
-                style={{ marginLeft: '40px', alignSelf: 'flex-start' }}
-                onClick={() => setOpenedOptions(false)}
-              >
-                <i className="fas fa-times"></i>
-              </button>
+              <div className="d-flex flex-column align-content-center justify-content-start">
+                <button
+                  style={{
+                    border: 'none',
+                    backgroundColor: 'white',
+                    marginTop: '15px'
+                  }}
+                  onClick={() => setOpenedOptions(false)}
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+                <button
+                  className="d-flex flex-column"
+                  style={{
+                    border: 'none',
+                    backgroundColor: 'white',
+                    position: 'relative',
+                    width: '45px',
+                    height: '45px',
+                    marginTop: '15px'
+                  }}
+                  onClick={() => setShowHat((prev) => !prev)}
+                >
+                  <img className="hat-img" src="/images/hatIcon.png" />
+                  {showHat && (
+                    <img
+                      className="forbidden-img"
+                      src="/images/forbidden.png"
+                    />
+                  )}
+                </button>
+              </div>
             </Col>
           )}
         </div>

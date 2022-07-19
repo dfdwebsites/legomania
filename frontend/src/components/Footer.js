@@ -5,7 +5,10 @@ import Row from 'react-bootstrap/Row';
 export default function Footer() {
   return (
     <footer className="p-4" style={{ backgroundColor: 'red' }}>
-      <Row className="mb-3">
+      <Row
+        className="mb-3"
+        style={{ maxWidth: '1200px', marginInline: 'auto' }}
+      >
         <Col className="d-flex align-items-center">
           <img src="/images/logo.jpg" alt="logo" />
         </Col>
