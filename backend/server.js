@@ -8,7 +8,12 @@ import userRouter from './routes/userRoutes.js';
 import orderRouter from './routes/orderRoutes.js';
 import uploadRouter from './routes/uploadRoutes.js';
 import { isAuth } from './utils.js';
+import cors from 'cors';
 
+const corsOptions = {
+  origin: 'https://lego-mania.netlify.app',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 dotenv.config();
 
 mongoose
@@ -24,6 +29,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors(corsOptions));
 
 app.get('/api/keys/paypal', isAuth, (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
